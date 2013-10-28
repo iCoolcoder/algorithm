@@ -6,6 +6,8 @@ python3.3
 
 install service:
 python WinSeriveViaPython.py install
+set auto mode:
+python WinSeriveViaPython.py --startup auto install
 start service:
 python WinSeriveViaPython.py start
 restart service:
