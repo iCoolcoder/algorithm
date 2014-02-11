@@ -1,0 +1,4 @@
+LIBRARY "FileReverse"
+EXPORTS 
+	FileReverse
+	Count0s
