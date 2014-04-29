@@ -84,6 +84,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BiTree.cpp" />
+    <ClCompile Include="CircularQueue.cpp" />
     <ClCompile Include="DllMain.cpp" />
     <ClCompile Include="Queue.cpp" />
     <ClCompile Include="Stack.cpp" />
@@ -94,6 +96,8 @@
     <ClCompile Include="XyzLibrary.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BiTree.h" />
+    <ClInclude Include="CircularQueue.h" />
     <ClInclude Include="Queue.h" />
     <ClInclude Include="Stack.h" />
     <ClInclude Include="stdafx.h" />
