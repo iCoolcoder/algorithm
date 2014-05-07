@@ -1,0 +1,39 @@
+// component.idl : IDL source for component
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (component.tlb) and marshalling code.
+
+#include "mtxattr.h"
+import "oaidl.idl";
+import "ocidl.idl";
+
+[
+	object,
+	uuid(004197C8-7D1C-4043-BAA0-162C9FC9CB24),
+	dual,
+	nonextensible,
+	helpstring("IBird Interface"),
+	pointer_default(unique)
+]
+interface IBird : IDispatch{
+	[id(1), helpstring("method Fly")] HRESULT Fly([out,retval] LONG* lSpeed);
+};
+[
+	uuid(79802937-E2FD-4BC5-BD4A-8C536EADFDBC),
+	version(1.0),
+	helpstring("component 1.0 Type Library")
+]
+library componentLib
+{
+	importlib("stdole2.tlb");
+	[
+		uuid(A9A5B879-B73C-43ED-A684-05740EB5B28D),
+		custom(TLBATTR_TRANS_REQUIRED,0),
+		helpstring("Bird Class")
+	]
+	coclass Bird
+	{
+		[default] interface IBird;
+	};
+};

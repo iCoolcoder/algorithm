@@ -1,0 +1,27 @@
+HKCR
+{
+	component.Bird.1 = s 'Bird Class'
+	{
+		CLSID = s '{A9A5B879-B73C-43ED-A684-05740EB5B28D}'
+	}
+	component.Bird = s 'Bird Class'
+	{
+		CLSID = s '{A9A5B879-B73C-43ED-A684-05740EB5B28D}'
+		CurVer = s 'component.Bird.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {A9A5B879-B73C-43ED-A684-05740EB5B28D} = s 'Bird Class'
+		{
+			ProgID = s 'component.Bird.1'
+			VersionIndependentProgID = s 'component.Bird'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Both'
+			}
+			val AppID = s '%APPID%'
+			'TypeLib' = s '{79802937-E2FD-4BC5-BD4A-8C536EADFDBC}'
+		}
+	}
+}
