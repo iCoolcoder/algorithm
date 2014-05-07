@@ -1,0 +1,4 @@
+LIBRARY	"IIS7NativeModule"
+
+EXPORTS
+    RegisterModule
