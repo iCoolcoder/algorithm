@@ -21,7 +21,7 @@ bool CircularQueue::EnQueue(const T& data)
 {
 	if(IsFull())
 		return false;
-
+	
 	_list[_endIndex++] = data;
 	_count++;
 
