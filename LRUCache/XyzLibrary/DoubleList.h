@@ -6,6 +6,7 @@ struct Node
 	T Data;
 	Node *Pre;
 	Node *Next;
+	size_t Len;
 };
 
 
@@ -22,7 +23,7 @@ public:
 	{
 		DestroyList(head);
 	}
-	int PushFront(T& data)
+	Node<T>* PushFront(T& data)
 	{
 		Node<T> *ele = new Node<T>;
 		ele->Data = data;
@@ -34,31 +35,45 @@ public:
 		ele->Pre = NULL;
 		head = ele;
 		len++;
-		return 1;
+		return ele;
 	}
 	int MoveToFront(Node<T>* ele)
 	{ 
-		if (head == NULL || head->next = NULL || ele = head)
+		if (head == NULL || head->Next = NULL || ele = head)
 			return 1;
 		
-		ele->pre->next = ele->next;
-		if (ele->next != NULL)
-			ele->next->pre = ele->pre;
+		ele->Pre->Next = ele->Next;
+		if (ele->Next != NULL)
+			ele->Next->Pre = ele->Pre;
 		else
-			tail = ele->pre;
+			tail = ele->Pre;
 
-		ele->pre = NULL;
-		head->pre = ele;
+		ele->Pre = NULL;
+		head->Pre = ele;
 		head = ele;
 
 		return 1;
+	}
+	void DeleteBack()
+	{
+		if (head == NULL)
+			return;
+
+		tail->Pre->Next = NULL;
+		Node<T>* ele = tail;
+		tail = tail->Pre;
+		delete ele;
+	}
+	Node<T>* GetTail()
+	{
+		return tail;
 	}
 private:
 	void DestroyList(Node<T> *head)
 	{
 		if (!head)
 		{
-			Node<T> *next;
+			Node<T> *next = head;
 			Node<T> *pre = next;
 			while(pre != NULL)
 			{

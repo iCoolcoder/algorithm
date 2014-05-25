@@ -48,7 +48,6 @@ public:
 template<class T>
 class XYZAPI LRUCache
 {
-	typedef T* Type;
 public:
 	LRUCache(size_t size)
 	{
@@ -56,21 +55,36 @@ public:
 		_currentCount = 0;
 	}
 	~LRUCache();
-	void Update(string key, T* content)
+	bool Add(string key, T& content, size_t len)
 	{
-		if (_currentSize + sizeof(*content) <= _size)
+		Node<T>* ele;
+		if (_currentSize + len <= _size)
 		{
-			Node* = _list.PushFront(key);
-			_map[key] = content;
-			_currentCount++;
+			ele = _list.PushFront(content);
+			ele->Len = len;
+			_map[key] = ele;
+			_currentSize += len;
+		}
+		else if (_currentSize < len)
+		{
+			return false;
 		}
 		else
 		{
-			_list.DeleteBack();
-			_list.PushFront(key);
-			_map[key] = content;
+			do
+			{
+				_list.DeleteBack();
+			}
+			while (_currentSize - _list.GetTail()->Len + len > _size)
+
+			ele = _list.PushFront(content);
+			ele->Len = len;
+			_map[key] = ele;
+			_currentSize += len;
 		}
+		return true;
 	}
+
 	bool Get(string key, T& content)
 	{
 		map<string, Node*>::iterator it = _map.find(key);
@@ -80,14 +94,14 @@ public:
 		}
 		else
 		{
-			content = *it.second();
-			_list.MoveToFront(it.second());
+			content = *it;
+			_list.MoveToFront(it->second());
 		}
 		return true;
 	}
 private:
 	DoubleList _list;
-	map<string, Node*> _map;
+	map<string, Node<T>*> _map;
 	size_t _size;
 	size_t _currentSize;
 };
