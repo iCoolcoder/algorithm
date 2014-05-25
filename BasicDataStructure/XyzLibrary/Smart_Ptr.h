@@ -3,8 +3,9 @@
 template<class T>
 class U_Ptr
 {
-	friend class Smart_Ptr;
-	U_Ptr(T* ptr): ptr(ptr), refTimes(1);
+	// don't know why use friend instead of public it failed here
+public:
+	U_Ptr(T* ptr): ptr(ptr), refTimes(1){}
 	~U_Ptr(void)
 	{
 		delete ptr;
@@ -18,7 +19,9 @@ template<class T>
 class Smart_Ptr
 {
 public:
-	Smart_Ptr(T* realPtr = 0): pointee(new U_Ptr(p));
+	Smart_Ptr(T* realPtr = 0): pointee(new U_Ptr<T>(realPtr))
+	{
+	}
 	Smart_Ptr(const Smart_Ptr &rhs): pointee(rhs.pointee)
 	{
 		++pointee->refTimes;

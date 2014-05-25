@@ -6,6 +6,7 @@
 #include "Queue.h"
 #include "Stack.h"
 #include "BiTree.h"
+#include "Smart_Ptr.h"
 
 #if _MSC_VER > 1200     // VC++7.0 and higher
 #include "AutoClosePtr.h"
@@ -32,6 +33,9 @@ int compare(int a, int b)
 
 int _tmain(int /*argc*/, _TCHAR* /*argv*/[])
 {
+	Smart_Ptr<int> x(new int(12));
+	printf("%d\n", *x.operator->());
+
 	BiTree bTree;
 
 	bTree.Insert(1, compare);
