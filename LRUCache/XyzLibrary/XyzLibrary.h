@@ -45,20 +45,53 @@ public:
     int Foo(int n);
 };
 
+template<class T>
 class XYZAPI LRUCache
 {
+	typedef T* Type;
 public:
-	LRUCache(size_t size);
+	LRUCache(size_t size)
+	{
+		_size = size;
+		_currentCount = 0;
+	}
 	~LRUCache();
-	void Update(string key, string content);
-	string Get(string key);
-	void Remove();
+	void Update(string key, T* content)
+	{
+		if (_currentSize + sizeof(*content) <= _size)
+		{
+			Node* = _list.PushFront(key);
+			_map[key] = content;
+			_currentCount++;
+		}
+		else
+		{
+			_list.DeleteBack();
+			_list.PushFront(key);
+			_map[key] = content;
+		}
+	}
+	bool Get(string key, T& content)
+	{
+		map<string, Node*>::iterator it = _map.find(key);
+		if (it == _map.end())
+		{
+			return false;
+		}
+		else
+		{
+			content = *it.second();
+			_list.MoveToFront(it.second());
+		}
+		return true;
+	}
 private:
 	DoubleList _list;
-	map<string, string> _map;
+	map<string, Node*> _map;
 	size_t _size;
-	size_t _currentCount;
+	size_t _currentSize;
 };
+
 
 
 // Handle type. In C++ language the iterface type is used.

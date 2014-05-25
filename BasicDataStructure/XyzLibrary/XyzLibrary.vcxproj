@@ -87,6 +87,7 @@
     <ClCompile Include="BiTree.cpp" />
     <ClCompile Include="CircularQueue.cpp" />
     <ClCompile Include="DllMain.cpp" />
+    <ClCompile Include="DoubleList.cpp" />
     <ClCompile Include="Queue.cpp" />
     <ClCompile Include="Smart_Ptr.cpp" />
     <ClCompile Include="Stack.cpp" />
@@ -99,6 +100,7 @@
   <ItemGroup>
     <ClInclude Include="BiTree.h" />
     <ClInclude Include="CircularQueue.h" />
+    <ClInclude Include="DoubleList.h" />
     <ClInclude Include="Queue.h" />
     <ClInclude Include="Smart_Ptr.h" />
     <ClInclude Include="Stack.h" />

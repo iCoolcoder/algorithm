@@ -57,58 +57,6 @@ int CXyz::Foo(int n)
     return n * n;
 }
 
-LRUCache::LRUCache(size_t size)
-{
-	_size = size;
-	_currentCount = 0;
-}
-
-void LRUCache::Update(string key, string content)
-{
-	if (_currentCount < _size)
-	{
-		_list.PushFront(key);
-		_map[key] = content;
-		_currentCount++;
-	}
-	else
-	{
-		_list.DeleteBack();
-		_list.PushFront(key);
-		_map[key] = content;
-	}
-}
-
-string LRUCache::Get(string key)
-{
-	map<string, string>::iterator it = _map.find(key);
-	if (it == _map.end())
-	{
-		string content;
-		//To do: content = Webapi();
-		Update(key, content);
-		return content;
-	}
-	else
-	{
-		if (Node* ele = _list.Find(key))
-		{
-			_list.Remove(ele);
-		}
-		_list.PushFront(key);
-	}
-	return "";
-}
-
-LRUCache::~LRUCache()
-{
-	
-}
-
-void LRUCache::Remove()
-{
-
-}
 
 ////////////////////////////////////////////////////////////////////////////////
 // C interface implementation.
