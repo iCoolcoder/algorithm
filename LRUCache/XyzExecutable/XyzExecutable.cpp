@@ -14,80 +14,16 @@
 
 int _tmain(int /*argc*/, _TCHAR* /*argv*/[])
 {
-	LRUCache dir;
-	dir.Remove();
-    // 1. COM-like usage.
-    IXyz* pXyz = ::GetXyz();
-
-    if(pXyz)
-    {
-        pXyz->Foo(42);
-        pXyz->Release();
-    }
-    //
-
-#if _MSC_VER >= 1600    // VC++10.0 and higher
-    
-    // 1a. Use smart pointers from the Standard C++ library.
-    typedef std::shared_ptr<IXyz> IXyzPtr;
-
-    IXyzPtr ptrXyz(::GetXyz(), std::mem_fn(&IXyz::Release));
-
-    if(ptrXyz)
-    {
-        ptrXyz->Foo(42);
-    }
-    //
-
-#elif _MSC_VER >= 1300 && _MSC_VER < 1600   // VC++7.0 - VC++9.0
-
-    // 1b. COM-Like usage with smart pointer.
-    // No need to call `IXyz::Release'; the instance will
-    // be released automatically in destructor of the smart pointer.
-    typedef AutoClosePtr<IXyz, void, &IXyz::Release> IXyzPtr;
-
-    IXyzPtr ptrXyz(::GetXyz());
-
-    if(ptrXyz)
-    {
-        ptrXyz->Foo(42);
-    }
-    //
-
-#else   // VC++6.0
-
-    // 1c. COM-Like usage with smart pointer.
-    // No need to call `IXyz::Release'; the instance will
-    // be released automatically in destructor of the smart pointer.
-    typedef AutoClosePtr<IXyz> IXyzPtr;
-
-    IXyzPtr ptrXyz(&IXyz::Release, ::GetXyz());
-
-    if(ptrXyz)
-    {
-        ptrXyz->Foo(42);
-    }
-    //
-
-#endif // _MSC_VER
-
-    // 2. Regular C++ class.
-    // The class must be exported.
-    CXyz xyz;
-    xyz.Foo(42);
-    //
-
-    // 3. Classic C language usage.
-    XYZHANDLE hXyz = GetXyz();
-
-    if(hXyz)
-    {
-        XyzFoo(hXyz, 42);
-        XyzRelease(hXyz);
-        hXyz = NULL;
-    }
-    //
-
+	LRUCache<char*> cache(5 * 1024);
+	char* str = "xyz";
+	char* temp = new char[100];
+	for (int i = 0; i < 6 * 1024 * 1024; i++)
+	{
+		_itoa_s(i, temp, 100, 10);
+		string key(temp);
+		cache.Add(key, str, 4);
+		printf("add one\n");
+	}
 	return 0;
 }
 

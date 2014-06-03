@@ -95,6 +95,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DoubleList.h" />
+    <ClInclude Include="LRUCache1.h" />
+    <ClInclude Include="SafeLRUCache.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="XyzLibrary.h" />
   </ItemGroup>

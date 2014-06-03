@@ -38,6 +38,12 @@
     <ClInclude Include="DoubleList.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="LRUCache1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SafeLRUCache.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />

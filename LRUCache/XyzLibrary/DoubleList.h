@@ -28,7 +28,13 @@ public:
 		Node<T> *ele = new Node<T>;
 		ele->Data = data;
 		if (NULL == head)
+		{
+			ele->Pre = NULL;
+			ele->Next = NULL;
 			head = tail = ele;
+			len++;
+			return ele;
+		}
 
 		head->Pre = ele;
 		ele->Next = head;
@@ -39,7 +45,7 @@ public:
 	}
 	int MoveToFront(Node<T>* ele)
 	{ 
-		if (head == NULL || head->Next = NULL || ele = head)
+		if (head == NULL || head->Next == NULL || ele == head)
 			return 1;
 		
 		ele->Pre->Next = ele->Next;
@@ -62,7 +68,10 @@ public:
 		tail->Pre->Next = NULL;
 		Node<T>* ele = tail;
 		tail = tail->Pre;
+		if (NULL == tail)
+			head = NULL;
 		delete ele;
+		len--;
 	}
 	Node<T>* GetTail()
 	{

@@ -52,9 +52,11 @@ public:
 	LRUCache(size_t size)
 	{
 		_size = size;
-		_currentCount = 0;
+		_currentSize = 0;
 	}
-	~LRUCache();
+	~LRUCache()
+	{
+	}
 	bool Add(string key, T& content, size_t len)
 	{
 		Node<T>* ele;
@@ -73,9 +75,10 @@ public:
 		{
 			do
 			{
+				_currentSize -= _list.GetTail()->Len;
 				_list.DeleteBack();
 			}
-			while (_currentSize - _list.GetTail()->Len + len > _size)
+			while (_currentSize - _list.GetTail()->Len + len > _size);
 
 			ele = _list.PushFront(content);
 			ele->Len = len;
@@ -87,20 +90,20 @@ public:
 
 	bool Get(string key, T& content)
 	{
-		map<string, Node*>::iterator it = _map.find(key);
+		map<string, Node<T>*>::iterator it = _map.find(key);
 		if (it == _map.end())
 		{
 			return false;
 		}
 		else
 		{
-			content = *it;
-			_list.MoveToFront(it->second());
+			content = (it->second)->Data;
+			_list.MoveToFront(it->second);
 		}
 		return true;
 	}
 private:
-	DoubleList _list;
+	DoubleList<T> _list;
 	map<string, Node<T>*> _map;
 	size_t _size;
 	size_t _currentSize;
