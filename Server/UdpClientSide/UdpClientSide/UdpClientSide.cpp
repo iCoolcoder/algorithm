@@ -4,7 +4,7 @@
 #include "stdafx.h"
 #include <Windows.h>
 
-#define PORT 7001
+#define PORT 10005
 
 struct UdpHeartPack {
     char UDPData[16] ;

@@ -7,7 +7,7 @@
 
 using namespace std;
 
-#define PORT 10004
+#define PORT 10003
 #define IP_ADDRESS "127.0.0.1"
 
 int _tmain(int argc, _TCHAR* argv[])
