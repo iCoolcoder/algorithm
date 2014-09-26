@@ -2,6 +2,7 @@
 #encoding:utf-8
 import re,time
 import codecs
+import region_map
 
 '''
 purpose:
@@ -188,7 +189,7 @@ if __name__ == '__main__':
 	print time.clock()
 	output = codecs.open('data1', 'wb', 'utf-8')
 	ip_region = load_ip_region('ip_region.ini')
-	region_map = load_region_map('region_map.txt')
+	region_map = region_map.region_dict
 	rates = analyze_flow_rate_per_user('mylog1')
 	items = sort_by_value(rates)
 	for k in items:
