@@ -22,6 +22,8 @@ def time2stamp(timestr, format_type='[%d/%m/%Y:%H:%M:%S+0800]'):
 	temp = ''
 	if (timestr.find('Sep') != -1):
 		temp = timestr.replace('Sep', '9')
+	elif (timestr.find('Oct') != -1):
+		temp = timestr.replace('Oct', '10')
 	return time.mktime(time.strptime(temp, format_type))			
 			
 '''
@@ -86,14 +88,17 @@ def sort_by_value(d):
 
 '''
 purpose:
-get every user's flow rate in one day
+get every user's flow rate in one period
+return:
+times count all the users' watching time
+rates count the rate for a user 
 usage:
-rates = analyze_flow_rate_per_user('mylog')
+times, rates = analyze_flow_rate_per_user('mylog', 1411974000, 1411977600)
 items = sort_by_value(rates)
 for k in items:
 	print k + ':   ' + str(rates[k])
 '''	
-def analyze_flow_rate_per_user(file_path):
+def analyze_flow_rate_per_user(file_path, from_time = 0, to_time = 22222222222222):
 	stuck_time_per_user = {}
 	total_time_per_user = {}
 	log = open(file_path, 'r')
@@ -101,16 +106,19 @@ def analyze_flow_rate_per_user(file_path):
 		words = line.split()
 		line_ip = words[0]
 		line_url = words[6]
-		if line_url.find('?t=pd') != -1:
-			stuck_time_per_user[line_ip] = stuck_time_per_user.get(line_ip, 1) + 1
-		elif line_url.find('?t=cv1') != -1:
-			total_time_per_user[line_ip] = total_time_per_user.get(line_ip, 1) + 1
-	
+		line_time = time2stamp(words[3] + words[4])
+		if from_time <= line_time < to_time:
+			if line_url.find('?t=pd') != -1:
+				stuck_time_per_user[line_ip] = stuck_time_per_user.get(line_ip, 1) + 1
+			elif line_url.find('?t=cv1') != -1:
+				total_time_per_user[line_ip] = total_time_per_user.get(line_ip, 1) + 1
 	rates = {}
+	times = {}
 	for k, v in stuck_time_per_user.items():
 		if k in total_time_per_user.keys():
-			rates[k] = float(v) / float(total_time_per_user[k])
-	return rates
+			times[k] = float(total_time_per_user[k])
+			rates[k] = float(stuck_time_per_user[k]) / float(total_time_per_user[k])
+	return times, rates
 	
 def get_start_and_end_ip(s):
 	parts = s.split('/')
@@ -187,16 +195,23 @@ def load_region_map(file_path):
 
 if __name__ == '__main__':
 	print time.clock()
-	output = codecs.open('data1', 'wb', 'utf-8')
+	output = codecs.open('data2', 'wb', 'utf-8')
 	ip_region = load_ip_region('ip_region.ini')
 	region_map = region_map.region_dict
-	rates = analyze_flow_rate_per_user('mylog1')
-	items = sort_by_value(rates)
+	times, rates = analyze_flow_rate_per_user('mylog3', 1411974000, 1411977600)
+	items = sort_by_value(times)
 	for k in items:
 		a, b = find_ip_region(ip_region, sorted(ip_region.keys()), k)
 		if b != -1 and region_map.has_key(b):
-			str_line = k + ':   ' + str(rates[k]) + '      region:   ' + region_map[b].decode('utf-8')
-			output.write(str_line)
+			str_line = k + ':   ' + str(times[k]) +  '   ' + str(rates[k]) + '    region:   ' + region_map[b].decode('utf-8')
+			output.write(str_line + '\n')
 			print str_line
+	num = 0
+	total = 0
+	for k, v in times.items():
+		if v > 5 and v < 10:
+			num += 1
+			total += rates[k]
+	print float(total) / float(num)
 	output.close()
 	print 'time past(%s)'%(time.clock())
