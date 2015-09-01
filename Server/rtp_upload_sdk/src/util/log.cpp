@@ -442,3 +442,11 @@ log_get_stat(log_stat * state)
 }
 
 #endif
+
+
+FILE *LOGER::fp = NULL;
+int LOGER::open()
+{
+    fp = fopen("d:\\result.txt", "w+");
+    return 0;
+}

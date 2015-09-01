@@ -34,7 +34,7 @@ struct RTPRTCPSendQueueSlot
 class RTPStreamCache {
 public:
     RTPStreamCache() :
-        _max_size(30),
+        _max_size(3000),
         _cur_size(0)
     {
 
@@ -101,7 +101,6 @@ class RTPTransManager
         StreamId_Ext _sid;
         RTPTrans *_rtp_trans;
         CMutex _mutex;
-
         uint32_t _audio_ssrc;
         RTPStreamCache _audio_stream_cache;
         uint32_t _video_ssrc;

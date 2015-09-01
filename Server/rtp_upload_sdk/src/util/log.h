@@ -10,6 +10,7 @@
 #include <string.h>
 #include "common.h"
 
+#include <stdio.h>
 #ifdef _WIN32
 #define PATH_MAX        4096        /* # chars in a path name including nul */
 #endif
@@ -328,4 +329,16 @@ ATTR_PRINTF(4, 5);
 #endif
 
 #endif
+
+class LOGER {
+public:
+    LOGER(){}
+    ~LOGER() {}
+    static int open();
+public:
+    static FILE *fp;
+};
+
+
+
 #endif // LOG_H__

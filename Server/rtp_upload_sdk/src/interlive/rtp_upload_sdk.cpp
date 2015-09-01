@@ -7,6 +7,8 @@
 #include <stddef.h>
 #include <string>
 
+#include "util/log.h"
+
 #ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
@@ -17,6 +19,7 @@ using namespace std;
 
 static Sender                    *p_Sender = NULL;
 static Receiver                  *p_Receiver = NULL;
+static RTPTransTimer             *p_RTPTransTimer = NULL;
 static RTPTransManager           *p_RTPMgr = NULL;
 
 static string receiver_ip;
@@ -24,9 +27,9 @@ static string receiver_tcp_port;
 static string receiver_udp_port;
 
 #if (defined __cplusplus)
-extern "C" DLLEXPORT int __stdcall rtp_upload_sdk_init(string ip, string tcp_port, string udp_port);
-extern "C" DLLEXPORT int __stdcall put_rtp(const char *buf, uint16_t len);
-extern "C" DLLEXPORT int __stdcall rtp_upload_sdk_destroy();
+extern "C" DLLEXPORT int rtp_upload_sdk_init(string ip, string tcp_port, string udp_port);
+extern "C" DLLEXPORT int put_rtp(const char *buf, uint16_t len);
+extern "C" DLLEXPORT int rtp_upload_sdk_destroy();
 #endif
 
 #define FIXED_SDP_STR "v=0\r\no=- 0 0 IN IP4 127.0.0.1\r\ns=000000000000000000000000152e9738\r\nc=IN IP4 10.10.69.127\r\nt=0 0\r\na=tool:YouKu Media Server\r\nm=audio 5002 RTP/AVP 97\r\na=rtpmap:97 MPEG4-GENERIC/48000/2\r\na=fmtp:97 profile-level-id=1;mode=AAC-hbr;sizelength=13;indexlength=3;indexdeltalength=3; config=1190\r\nm=video 5000 RTP/AVP 96\r\na=rtpmap:96 H264/90000"
@@ -54,11 +57,15 @@ int put_sdp()
     return 0;
 }
 
-int __stdcall rtp_upload_sdk_init(string ip, string tcp_port, string udp_port)
+int rtp_upload_sdk_init(string ip, string tcp_port, string udp_port)
 {
+    LOGER::open();
+    fprintf(LOGER::fp, "open\n");
+    fflush(LOGER::fp);
     put_sdp();
+    
     StreamId_Ext sid;
-    sid.parse("000000000000000000000000152E2840");
+    sid.parse("000000000000000000000000152e9738");
     p_RTPMgr = new RTPTransManager("cctv", sid);
     if (NULL == p_RTPMgr) {
         return -1;
@@ -66,12 +73,19 @@ int __stdcall rtp_upload_sdk_init(string ip, string tcp_port, string udp_port)
     if (0 != p_RTPMgr->open_sender()) {
         return -1;
     }
-    p_Sender = new Sender(ip, udp_port, p_RTPMgr);
+
+    int fd = socket(AF_INET, SOCK_DGRAM, 0);
+    p_Sender = new Sender(fd, ip, udp_port, p_RTPMgr);
     if (NULL == p_Sender) {
         return -1;
     }
-    p_Receiver = new Receiver(ip, udp_port, p_RTPMgr);
+    p_Receiver = new Receiver(fd, p_RTPMgr);
     if (NULL == p_Receiver) {
+        return -1;
+    }
+
+    p_RTPTransTimer = new RTPTransTimer(p_RTPMgr);
+    if (NULL == p_RTPTransTimer) {
         return -1;
     }
 
@@ -80,23 +94,26 @@ int __stdcall rtp_upload_sdk_init(string ip, string tcp_port, string udp_port)
 
     p_Sender->Start();
     p_Receiver->Start();
+    p_RTPTransTimer->Start();
     p_Sender->Join();
     p_Receiver->Join();
+    p_RTPTransTimer->Join();
     return 0;
 }
 
-int __stdcall put_rtp(const char *buf, uint16_t len)
+int put_rtp(const char *buf, uint16_t len)
 {
     p_RTPMgr->put_rtp(buf, len);
     return 0;
 }
 
-int __stdcall rtp_upload_sdk_destroy()
+int rtp_upload_sdk_destroy()
 {
     WSACleanup();
     SAFE_DELETE(p_RTPMgr);
     SAFE_DELETE(p_Sender);
     SAFE_DELETE(p_Receiver);
+    SAFE_DELETE(p_RTPTransTimer);
     return 0;
 }
 

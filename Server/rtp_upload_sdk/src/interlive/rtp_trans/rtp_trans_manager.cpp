@@ -5,6 +5,8 @@
 #include "util/buffer.h"
 #include <string>
 
+#include "util/log.h"
+
 using namespace std;
 using namespace avformat;
 
@@ -29,7 +31,7 @@ RTPTransManager::~RTPTransManager()
 int RTPTransManager::open_receiver()
 {
     CMAutoLock lock(_mutex);
-    RTPTrans *_rtp_trans = new RTPTrans(_name, _sid, this, RECEIVER_TRANS_MODE);
+    _rtp_trans = new RTPTrans(_name, _sid, this, RECEIVER_TRANS_MODE);
     return 0;
 }
 
@@ -43,7 +45,7 @@ int RTPTransManager::close_receiver()
 int RTPTransManager::open_sender()
 {
     CMAutoLock lock(_mutex);
-    RTPTrans *_rtp_trans = new RTPTrans(_name, _sid, this, SENDER_TRANS_MODE);
+    _rtp_trans = new RTPTrans(_name, _sid, this, SENDER_TRANS_MODE);
     return 0;
 }
 
@@ -58,6 +60,7 @@ int RTPTransManager::put_rtp(const void *rtp, uint16_t len)
 {
     CMAutoLock lock(_mutex);
     _rtp_trans->on_handle_rtp((avformat::RTP_FIXED_HEADER *)rtp, len);
+
     avformat::RTP_FIXED_HEADER * rtp_header = (avformat::RTP_FIXED_HEADER *)rtp;
 
     RTPAVType type = (RTPAVType)rtp_header->payload;
@@ -67,16 +70,19 @@ int RTPTransManager::put_rtp(const void *rtp, uint16_t len)
     case RTP_AV_AAC:
         _audio_ssrc = rtp_header->get_ssrc();
         _audio_stream_cache.put_rtp((avformat::RTP_FIXED_HEADER *)rtp, len);
+        send_rtp(_audio_ssrc, rtp_header->get_seq());
         break;
     case RTP_AV_H264:
         _video_ssrc = rtp_header->get_ssrc();
         _video_stream_cache.put_rtp((avformat::RTP_FIXED_HEADER *)rtp, len);
+        send_rtp(_video_ssrc, rtp_header->get_seq());
         break;
     case RTP_AV_ALL:
     case RTP_AV_NULL:
     default:
         break;
     }
+
     return 0;
 }
 
@@ -126,7 +132,6 @@ void RTPTransManager::send_rtp(uint32_t ssrc, uint16_t seq)
 void RTPTransManager::send_rtcp(uint32_t ssrc, const RtcpPacket *rtcp)
 {
     CMAutoLock lock(_mutex);
-
     char buf[10 * 1024];
     uint32_t len = -1;
     rtcp->Build((uint8_t *)buf, (size_t *)&len, 10240);
@@ -154,5 +159,6 @@ int RTPTransManager::get_one_rtp_rtcp(char *buf, uint32_t len)
         _send_queue.pop_front();
         return rtp_len;
     }
+
     return -1;
 }

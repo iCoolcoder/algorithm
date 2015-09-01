@@ -9,11 +9,11 @@
 extern "C" {
 #endif
 
-    DLLEXPORT int __stdcall rtp_upload_sdk_init(std::string ip, std::string tcp_port, std::string udp_port);
+    DLLEXPORT int rtp_upload_sdk_init(std::string ip, std::string tcp_port, std::string udp_port);
 
-    DLLEXPORT int __stdcall put_rtp(const char *buf, uint16_t len);
+    DLLEXPORT int put_rtp(const char *buf, uint16_t len);
 
-    DLLEXPORT int __stdcall rtp_upload_sdk_destroy();
+    DLLEXPORT int rtp_upload_sdk_destroy();
 
 #if (defined __cplusplus)
 }
