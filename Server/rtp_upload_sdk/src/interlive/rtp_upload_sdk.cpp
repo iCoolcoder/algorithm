@@ -89,8 +89,10 @@ int rtp_upload_sdk_init(string ip, string tcp_port, string udp_port)
         return -1;
     }
 
+#ifdef _WIN32
     WSADATA wsa = { 0 };
     WSAStartup(MAKEWORD(2, 2), &wsa);
+#endif
 
     p_Sender->Start();
     p_Receiver->Start();
@@ -109,7 +111,9 @@ int put_rtp(const char *buf, uint16_t len)
 
 int rtp_upload_sdk_destroy()
 {
+#ifdef _WIN32
     WSACleanup();
+#endif
     SAFE_DELETE(p_RTPMgr);
     SAFE_DELETE(p_Sender);
     SAFE_DELETE(p_Receiver);
