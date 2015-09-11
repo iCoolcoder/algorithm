@@ -460,6 +460,29 @@ decode_rtp_u2r_req_state(rtp_u2r_req_state * body, buffer * ibuf)
 }
 
 int 
+encode_rtp_u2r_req_state(const rtp_u2r_req_state *body, buffer *obuf)
+{
+    if (body == NULL || obuf == NULL)
+    {
+        return -1;
+    }
+
+    uint32_t total_sz = sizeof(proto_header)+sizeof(rtp_u2r_req_state);
+    encode_header(obuf, CMD_RTP_U2R_REQ_STATE, total_sz);
+
+    uint32_t version = htonl(body->version);
+    uint64_t user_id = util_htonll(body->user_id);
+
+    buffer_append_ptr(obuf, &version, sizeof(version));
+    buffer_append_ptr(obuf, &(body->streamid), sizeof(body->streamid));
+    buffer_append_ptr(obuf, &user_id, sizeof(user_id));
+    buffer_append_ptr(obuf, &body->token, sizeof(body->token));
+    buffer_append_ptr(obuf, &body->payload_type, sizeof(uint8_t));
+
+    return 0;
+}
+
+int 
 encode_rtp_u2r_packet(uint8_t* body, uint32_t len, buffer * obuf)
 {
     uint32_t total_sz = sizeof(proto_header)+len;

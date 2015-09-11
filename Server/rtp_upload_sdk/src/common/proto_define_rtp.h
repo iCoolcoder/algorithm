@@ -4,6 +4,8 @@
 
 #define STREAM_ID_LEN 16
 
+#pragma pack(1)
+
 enum RTPProtoType
 {
     PROTO_RTP = 0,
@@ -98,3 +100,5 @@ struct f2f_rtp_result : public f2f_rtp_packet_header
 {
     uint16_t result;
 };
+
+#pragma pack()

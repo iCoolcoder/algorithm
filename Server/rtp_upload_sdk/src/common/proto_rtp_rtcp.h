@@ -33,6 +33,7 @@ int encode_rtp_f2f_req_state_uint8(rtp_f2f_req_state* body, uint8_t* obuf, uint1
 // rtp uploader <----> rtp receiver
 int decode_rtp_u2r_req_state(uint8_t* input, uint16_t len, rtp_u2r_req_state* body);
 int decode_rtp_u2r_req_state(rtp_u2r_req_state * body, buffer * input);
+int encode_rtp_u2r_req_state(const rtp_u2r_req_state* body, buffer * obuf);
 int encode_rtp_u2r_rsp_state(const rtp_u2r_rsp_state* body, buffer* obuf);
 int encode_rtp_u2r_rsp_state_uint8(rtp_u2r_rsp_state* body, uint8_t* obuf, uint16_t& len);
 int encode_rtp_u2r_packet(uint8_t* body, uint32_t len, buffer * obuf);

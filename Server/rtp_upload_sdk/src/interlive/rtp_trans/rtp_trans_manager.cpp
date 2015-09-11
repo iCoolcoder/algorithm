@@ -147,6 +147,18 @@ void RTPTransManager::send_rtcp(uint32_t ssrc, const RtcpPacket *rtcp)
     }
 }
 
+void RTPTransManager::send_request(const char *buf, uint32_t len)
+{
+    CMAutoLock lock(_mutex);
+    if (len > 0)
+    {
+        RTPRTCPSendQueueSlot slot;
+        slot.len = len;
+        memcpy(slot.payload, buf, len);
+        _send_queue.push_back(slot);
+    }
+}
+
 int RTPTransManager::get_one_rtp_rtcp(char *buf, uint32_t len)
 {
     CMAutoLock lock(_mutex);

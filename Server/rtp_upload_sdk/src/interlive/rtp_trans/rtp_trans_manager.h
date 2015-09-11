@@ -94,6 +94,7 @@ class RTPTransManager
         void on_timer();
         void send_rtp(uint32_t ssrc, uint16_t seq);
         void send_rtcp(uint32_t ssrc, const avformat::RtcpPacket *rtcp);
+        void send_request(const char *buf, uint32_t len);
         int get_one_rtp_rtcp(char *buf, uint32_t len);
 
     private:

@@ -41,7 +41,8 @@ namespace avformat
 
     rtp_media_info::rtp_media_info()
     {
-        extra_data = NULL;
+        extra_data = new uint8_t[2048];
+        memset(extra_data, 0, 2048);
         extra_data_len = 0;
     }
 
@@ -59,30 +60,36 @@ namespace avformat
 
         if (right.extra_data == NULL || right.extra_data_len == 0)
         {
-            this->extra_data = NULL;
+            return;
         }
         else
         {
-            this->extra_data = new uint8_t[this->extra_data_len];
             memcpy(this->extra_data, right.extra_data, this->extra_data_len);
         }
     }
 
     SdpInfo::SdpInfo()
     {
-        _sdp_header = NULL;
+        _sdp_header = new sdp_session_level();
         _sdp_char = new char[4096];
+        memset(_sdp_char, 0, 4096);
+    }
+
+    string SdpInfo::load(std::string& sdp)
+    {
+        return load(sdp.c_str(), sdp.length());
     }
 
     string SdpInfo::load(const char* sdp, int len)
     {
         if (sdp == NULL || len <= 0)
         {
-            // TODO: error
+            ERR("sdp is invalid");
             return string("");
         }
 
         _sdp_ss.clear();
+        _sdp_ss.str("");
         _sdp_ss << sdp;
 
         parse_sdp_str(sdp, len);
@@ -104,28 +111,10 @@ namespace avformat
     {
         return _sdp_ss.str().length();
     }
-     
-    int SdpInfo::add_sdp_session_level(sdp_session_level *s)
-    {
-        if (s == NULL)
-        {
-            return -1;
-        }
-
-        if (_sdp_header != NULL)
-        {
-            delete _sdp_header;
-        }
-
-        _sdp_header = s;
-
-        return 0;
-    }
 
     int SdpInfo::add_media(rtp_media_info *s)
     {
         _media_infos.push_back(s);
-
         return _media_infos.size();
     }
 
@@ -147,13 +136,19 @@ namespace avformat
         if (_sdp_header != NULL)
         {
             delete _sdp_header;
+            _sdp_header = NULL;
         }
 
         if (_sdp_char != NULL)
         {
             delete _sdp_char;
+            _sdp_char = NULL;
         }
+    }
 
+    sdp_session_level* SdpInfo::get_sdp_header()
+    {
+        return _sdp_header;
     }
 
     const vector<rtp_media_info*>& SdpInfo::get_media_infos()
@@ -161,28 +156,25 @@ namespace avformat
         return _media_infos;
     }
 
-    void SdpInfo::parse_sdp_str(const char *sdp_str, uint32_t len) 
+    void SdpInfo::parse_sdp_str(const char *sdp_str, uint32_t len)
     {
-//        if (media_count>0)
-//        {
-//            for (int i = 0; i < media_count; i++)
-//            {
-//                memset(&medias[i], 0, sizeof(rtp_media_info));
-//            }
-//            media_count = 0;
-//        }
-
         const char *p;
         int letter;
         char buf[16384], *q;
-        SDPParseState *s1 = new SDPParseState;
+        SDPParseState s1;
+
+        INF("parse sdp, len: %u", len);
+        INF("parse sdp, sdp: %s", sdp_str);
 
         p = sdp_str;
         for (;;) {
             p += strspn(p, SPACE_CHARS);
             letter = *p;
             if (letter == '\0')
+            {
+                DBG("end of sdp_str");
                 break;
+            }
             p++;
             if (*p != '=')
                 goto next_line;
@@ -195,20 +187,25 @@ namespace avformat
                     *q++ = *p;
                 p++;
             }
+            if ((p - sdp_str) > len)
+            {
+                DBG("exceed length of sdp_str, len=%u", len);
+                break;
+            }
             *q = '\0';
-            //sdp_parse_line(s, s1, letter, buf);
-            parse_sdp_line(s1, letter, buf);
+
+            parse_sdp_line(&s1, letter, buf);
         next_line:
             while (*p != '\n' && *p != '\0')
                 p++;
             if (*p == '\n')
                 p++;
         }
-        delete s1;
     }
 
 
-    void SdpInfo::parse_sdp_line(SDPParseState *s1, int letter, const char *buf) 
+
+    void SdpInfo::parse_sdp_line(SDPParseState *s1, int letter, const char *buf)
     {
         char buf1[64], st_type[64];
         const char *p;
@@ -218,6 +215,51 @@ namespace avformat
         rtp_media_info* media_info;
 
         switch (letter) {
+        case 'v': // version
+            get_word(buf1, sizeof(buf1), &p);
+            _sdp_header->sdp_version = atoi(buf1);
+            break;
+        case 'o': // origin
+            get_word(buf1, sizeof(buf1), &p);
+            _sdp_header->user = buf1;
+            get_word(buf1, sizeof(buf1), &p);
+            _sdp_header->id = atoi(buf1);
+            get_word(buf1, sizeof(buf1), &p);
+            _sdp_header->version = atoi(buf1);
+            get_word(buf1, sizeof(buf1), &p);
+            get_word(buf1, sizeof(buf1), &p);
+            _sdp_header->src_type = buf1;
+            get_word(buf1, sizeof(buf1), &p);
+            _sdp_header->src_addr = buf1;
+            break;
+        case 's': // name
+            get_word_sep(buf1, sizeof(buf1), "\r", &p);
+            _sdp_header->name = buf1;
+            break;
+        case 't':
+            get_word(buf1, sizeof(buf1), &p);
+            _sdp_header->start_time = atoi(buf1);
+            get_word(buf1, sizeof(buf1), &p);
+            _sdp_header->end_time = atoi(buf1);
+            break;
+        case 'c':
+            get_word(buf1, sizeof(buf1), &p);
+            if (strcmp(buf1, "IN") != 0)
+                return;
+            get_word(buf1, sizeof(buf1), &p);
+            if (strcmp(buf1, "IP4"))
+                return;
+            get_word_sep(buf1, sizeof(buf1), "/", &p);
+            if (_media_infos.size() == 0)
+            {
+                _sdp_header->dst_addr = buf1;
+            }
+            else
+            {
+                rtp_media_info* info = _media_infos.back();
+                info->dest_addr = buf1;
+            }
+            break;
         case 'm':
             /* new stream */
             s1->skip_media = 0;
@@ -241,11 +283,11 @@ namespace avformat
                 /* NOTE: rtpmap is only supported AFTER the 'm=' tag */
                 get_word(buf1, sizeof(buf1), &p);
                 payload_type = atoi(buf1);
-                
+
                 if (_media_infos.size() > 0) {
                     md = _media_infos[_media_infos.size() - 1];
                     //sdp_parse_rtpmap(s, md, payload_type, p);
-                    get_word_sep(buf1, sizeof(buf), "/ ", &p);
+                    get_word_sep(buf1, sizeof(buf1), "/ ", &p);
                     if (strcmp(buf1, "H264") == 0)
                     {
                         md->payload_type = RTP_AV_H264;
@@ -254,12 +296,12 @@ namespace avformat
                     {
                         md->payload_type = RTP_AV_AAC;
                     }
-                    get_word_sep(buf1, sizeof(buf), "/", &p);
+                    get_word_sep(buf1, sizeof(buf1), "/", &p);
                     md->rate = atoi(buf1);
                     if (RTP_AV_AAC == md->payload_type)
                     {
-                        get_word_sep(buf1, sizeof(buf), "/", &p);
-                        md->channels = atoi(buf);
+                        get_word_sep(buf1, sizeof(buf1), "/", &p);
+                        md->channels = atoi(buf1);
                     }
                 }
                 s1->seen_rtpmap = 1;
@@ -283,7 +325,7 @@ namespace avformat
                 payload_type = atoi(buf1);
                 if (s1->seen_rtpmap && _media_infos.size() > 0)
                 {
-                    md = _media_infos[_media_infos.size() - 1];
+                    md = _media_infos.back();
                     //parse_fmtp(s, rt, payload_type, buf);
                     if (RTP_AV_H264 == md->payload_type)
                     {
@@ -306,6 +348,8 @@ namespace avformat
     string SdpInfo::generate_sdp_str()
     {
         int len = 0;
+        _sdp_ss.clear();
+        _sdp_ss.str("");
         sdp_write_header(_sdp_ss, _sdp_header);
         for (int i = 0; i < _media_infos.size(); i++)
         {
@@ -332,19 +376,19 @@ namespace avformat
 
     void SdpInfo::sdp_write_address(stringstream& ss, const char *dest_addr, const char *dest_type, int ttl)
     {
-        if (dest_addr && (strlen(dest_addr) > 0) )
+        if (dest_addr && (strlen(dest_addr) > 0))
         {
             if (!dest_type)
                 dest_type = "IP4";
             char buff[1024];
 
-            if (ttl > 0 && !strcmp(dest_type, "IP4")) 
+            if (ttl > 0 && !strcmp(dest_type, "IP4"))
             {
                 /* The TTL should only be specified for IPv4 multicast addresses,
                 * not for IPv6. */
                 sprintf(buff, "c=IN %s %s/%d\r\n", dest_type, dest_addr, ttl);
             }
-            else 
+            else
             {
                 sprintf(buff, "c=IN %s %s\r\n", dest_type, dest_addr);
             }
@@ -361,13 +405,11 @@ namespace avformat
             s->sdp_version,
             s->id, s->version, s->src_type.c_str(), s->src_addr.c_str(),
             s->name.c_str());
-
         ss << buff;
 
-//        sdp_write_address(ss, s->dst_addr.c_str(), s->dst_type.c_str(), s->ttl);
+        sdp_write_address(ss, s->dst_addr.c_str(), s->dst_type.c_str(), s->ttl);
 
         sprintf(buff, "t=%d %d\r\na=tool:YouKu Media Server\r\n", 0, 0);
-
         ss << buff;
     }
 
@@ -404,7 +446,7 @@ namespace avformat
         sprintf(buff, "m=%s %d %s %d\r\n", type, s->dest_port, transport, payload_type);
         ss << buff;
 
-        sdp_write_address(ss, _sdp_header->dst_addr.c_str(), "IP4", _sdp_header->ttl);
+        sdp_write_address(ss, s->dest_addr.c_str(), "IP4", _sdp_header->ttl);
 
         //if (s->rate) {
         //	sprintf_s(buff, size, "b=AS:%d\r\n", s->rate);
@@ -415,15 +457,16 @@ namespace avformat
 
     void SdpInfo::sdp_write_media_attributes(std::stringstream& ss, struct rtp_media_info *s)
     {
-        char *config;
+        char config[1024];
         char buff[1024];
+        config[0] = 0;
 
         switch (s->payload_type)
         {
         case RTP_AV_H264:
             if (s->extra_data_len)
             {
-                config = extradata2psets(s);
+                extradata2psets(s, config);
             }
             else
             {
@@ -433,20 +476,19 @@ namespace avformat
                 return;
             }
 
-            if (!config)
+            if (strlen(config) == 0)
             {
                 return;
             }
             sprintf(buff, "a=rtpmap:%d H264/90000\r\na=fmtp:%d packetization-mode=%d%s\r\n",
-                    s->payload_type, s->payload_type, 1, config);
+                s->payload_type, s->payload_type, 1, config);
             ss << buff;
-            delete config;
             break;
 
         case RTP_AV_AAC:
             if (s->extra_data_len)
             {
-                config = extradata2config(s);
+                extradata2config(s, config);
             }
             else
             {
@@ -454,17 +496,16 @@ namespace avformat
                 return;
             }
 
-            if (!config)
+            if (strlen(config) == 0)
             {
                 return;
             }
             sprintf(buff, "a=rtpmap:%d MPEG4-GENERIC/%d/%d\r\n",
-                          s->payload_type, s->rate, s->channels);
+                s->payload_type, s->rate, s->channels);
             ss << buff;
-            sprintf(buff, "a=fmtp:%d profile-level-id=1;mode=AAC-hbr;sizelength=13;indexlength=3;indexdeltalength=3%s\r\n", 
-                        s->payload_type, config);
+            sprintf(buff, "a=fmtp:%d profile-level-id=1;mode=AAC-hbr;sizelength=13;indexlength=3;indexdeltalength=3%s\r\n",
+                s->payload_type, config);
             ss << buff;
-            delete config;
             break;
 
         case RTP_AV_MP3:
@@ -475,9 +516,9 @@ namespace avformat
         }
     }
 
-    char *SdpInfo::extradata2psets(struct rtp_media_info *s)
+    char *SdpInfo::extradata2psets(struct rtp_media_info *s, char* psets)
     {
-        char *psets, *p;
+        char *p;
         const uint8_t *r;
         static const char pset_string[] = "; sprop-parameter-sets=";
         static const char profile_string[] = "; profile-level-id=";
@@ -485,8 +526,8 @@ namespace avformat
         int extradata_size = s->extra_data_len;
         const uint8_t *sps = NULL, *sps_end;
 
-        if (s->extra_data_len > 1024) {
-            //av_log(c, AV_LOG_ERROR, "Too much extradata!\n");
+        if (s->extra_data_len > 1024)
+        {
             WRN("Too much extradata! payload_type %d extra_len %d addr %s \n", s->payload_type, s->extra_data_len, s->dest_addr);
             return NULL;
         }
@@ -497,16 +538,10 @@ namespace avformat
         tmpbuf = extradata;
         }*/
 
-        psets = new char[1024];
-        if (!psets) {
-            WRN("Cannot allocate memory for the parameter sets.\n");
-            //free(tmpbuf);
-            return NULL;
-        }
         memcpy(psets, pset_string, strlen(pset_string));
         p = psets + strlen(pset_string);
         r = avc_find_startcode(extradata, extradata + extradata_size);
-        while (r < extradata + extradata_size) 
+        while (r < extradata + extradata_size)
         {
             const uint8_t *r1;
             uint8_t nal_type;
@@ -527,21 +562,18 @@ namespace avformat
                 sps = r;
                 sps_end = r1;
             }
-            if (!base64_encode(p, 1024 - (p - psets), r, r1 - r)) 
+            if (!base64_encode(p, 1024 - (p - psets), r, r1 - r))
             {
-                //av_log(c, AV_LOG_ERROR, "Cannot Base64-encode %"PTRDIFF_SPECIFIER" %"PTRDIFF_SPECIFIER"!\n", MAX_PSET_SIZE - (p - psets), r1 - r);
                 WRN("Cannot Base64-encode %d %d!\n", (int)(1024 - (p - psets)), (int)(r1 - r));
-                free(psets);
-                //free(tmpbuf);
-
                 return NULL;
             }
             p += strlen(p);
             r = r1;
         }
-        if (sps && sps_end - sps >= 4) {
+        if (sps && sps_end - sps >= 4)
+        {
             memcpy(p, profile_string, strlen(profile_string));
-            p += strlen(p);
+            p += strlen(profile_string);
             data_to_hex(p, sps + 1, 3, 0);
             p[6] = '\0';
         }
@@ -549,19 +581,14 @@ namespace avformat
         return psets;
     }
 
-    char *SdpInfo::extradata2config(struct rtp_media_info *s)
+    char *SdpInfo::extradata2config(struct rtp_media_info *s, char* config)
     {
-        char *config;
+        if (s->extra_data_len> 1024)
+        {
+            WRN("Too large extradata!\n");
+            return NULL;
+        }
 
-        if (s->extra_data_len> 1024) {
-            WRN("Too much extradata!\n");
-            return NULL;
-        }
-        config = new char[10 + s->extra_data_len * 2];
-        if (!config) {
-            WRN("Cannot allocate memory for the config info.\n");
-            return NULL;
-        }
         memcpy(config, "; config=", 9);
         data_to_hex(config + 9, s->extra_data, s->extra_data_len, 0);
         config[9 + s->extra_data_len * 2] = 0;
@@ -792,6 +819,13 @@ namespace avformat
         return buff;
     }
 
+    static inline int toupper(int c)
+    {
+        if (c >= 'a' && c <= 'z')
+            c ^= 0x20;
+        return c;
+    }
+
     int SdpInfo::hex_to_data(uint8_t *data, const char *p)
     {
         int c, len, v;
@@ -802,7 +836,8 @@ namespace avformat
             p += strspn(p, SPACE_CHARS);
             if (*p == '\0')
                 break;
-            c = (((unsigned char)*p++) ^ 0x20);
+            c = toupper((unsigned char)(*p));
+            p++;
             if (c >= '0' && c <= '9')
                 c = c - '0';
             else if (c >= 'A' && c <= 'F')
@@ -845,7 +880,8 @@ namespace avformat
         p = *pp;
         p += strspn(p, SPACE_CHARS);
         q = buf;
-        while (!isspace(*p) && *p != '\0') {
+        while (!isspace(*p) && *p != '\0')
+        {
             if ((q - buf) < buf_size - 1)
                 *q++ = *p;
             p++;
@@ -856,10 +892,10 @@ namespace avformat
     }
 
 
-    int SdpInfo::parse_h264_sdp_line(rtp_media_info *s, const char *attr, const char *value) {
-
-        if (!strcmp(attr, "packetization-mode")) {
-            //av_log(s, AV_LOG_DEBUG, "RTP Packetization Mode: %d\n", atoi(value));
+    int SdpInfo::parse_h264_sdp_line(rtp_media_info *s, const char *attr, const char *value)
+    {
+        if (!strcmp(attr, "packetization-mode"))
+        {
             s->packetization_mode = atoi(value);
             /*
             * Packetization Mode:
@@ -873,34 +909,28 @@ namespace avformat
                 WRN("Interleaved RTP mode is not supported yet.\n");
             }
         }
-        else if (!strcmp(attr, "profile-level-id")) {
+        else if (!strcmp(attr, "profile-level-id"))
+        {
             if (strlen(value) == 6)
-                //parse_profile_level_id(s, h264_data, value);
+            {
                 s->h264_profile_level_id = atoi(value);
+            }
         }
-        else if (!strcmp(attr, "sprop-parameter-sets")) {
+        else if (!strcmp(attr, "sprop-parameter-sets"))
+        {
             int ret;
             s->extra_data_len = 0;
-            free(s->extra_data);
-            //av_freep(&codec->extradata);
-            ret = h264_parse_sprop_parameter_sets(s, &(s->extra_data),
-                &s->extra_data_len, value);
+            ret = h264_parse_sprop_parameter_sets(s, s->extra_data, s->extra_data_len, value);
             return ret;
         }
         return 0;
     }
 
-    int SdpInfo::parse_aac_sdp_line(rtp_media_info *s, const char *attr, const char *value) {
-
-        if (!strcmp(attr, "config")) {
-            s->extra_data_len = hex_to_data(NULL, value);
-            if (s->extra_data) {
-                delete s->extra_data;
-            }
-            s->extra_data = new uint8_t(s->extra_data_len);
-            if (!(s->extra_data))
-                return -1;
-            hex_to_data(s->extra_data, value);
+    int SdpInfo::parse_aac_sdp_line(rtp_media_info *s, const char *attr, const char *value)
+    {
+        if (!strcmp(attr, "config"))
+        {
+            s->extra_data_len = hex_to_data(s->extra_data, value);
             return 0;
         }
         return 0;
@@ -954,15 +984,9 @@ namespace avformat
         int(*parse_fmtp_func)(rtp_media_info *s, const char *attr, const char *value))
     {
         char attr[256];
-        char *value;
+        char value[1024];
         int res;
         int value_size = strlen(p) + 1;
-
-        if (!(value = new char[value_size])) {
-            //av_log(NULL, AV_LOG_ERROR, "Failed to allocate data for FMTP.\n");
-            WRN("Failed to allocate data for FMTP.\n");
-            return -1;
-        }
 
         // remove protocol identifier
         while (*p && *p == ' ')
@@ -976,30 +1000,31 @@ namespace avformat
             attr, sizeof(attr),
             value, value_size)) {
             res = parse_fmtp_func(s, attr, value);
-            if (res < 0) {
-                free(value);
+            if (res < 0)
+            {
                 return res;
             }
         }
-        free(value);
         return 0;
     }
 #define FF_INPUT_BUFFER_PADDING_SIZE 32
     static const uint8_t start_sequence[] = { 0, 0, 0, 1 };
 
     int SdpInfo::h264_parse_sprop_parameter_sets(rtp_media_info *s,
-        uint8_t **data_ptr, uint32_t *size_ptr,
-        const char *value)
+        uint8_t *data_ptr, uint32_t& data_size, const char *value)
     {
-        char base64packet[1024];
-        uint8_t decoded_packet[1024];
-        int packet_size;
+        int size = 0;
 
-        while (*value) {
+        while (*value)
+        {
+            char base64packet[1024];
+            uint8_t decoded_packet[1024];
+            int packet_size;
             char *dst = base64packet;
 
             while (*value && *value != ','
-                && (dst - base64packet) < (uint32_t)sizeof(base64packet)-1) {
+                && (dst - base64packet) < (uint32_t)sizeof(base64packet)-1)
+            {
                 *dst++ = *value++;
             }
             *dst++ = '\0';
@@ -1007,31 +1032,26 @@ namespace avformat
             if (*value == ',')
                 value++;
 
-            packet_size = base64_decode(decoded_packet, base64packet,
-                sizeof(decoded_packet));
-            if (packet_size > 0) {
-                uint8_t *dest = new uint8_t[
-                    packet_size + sizeof(start_sequence)+
-                        *size_ptr +
-                        FF_INPUT_BUFFER_PADDING_SIZE];
-                    if (!dest) {
-                        //av_log(s, AV_LOG_ERROR,
-                        //	"Unable to allocate memory for extradata!\n");
-                        WRN("Unable to allocate memory for extradata!\n");
-                        return -1;
-                    }
-                    *data_ptr = dest;
+            packet_size = base64_decode(decoded_packet, base64packet, sizeof(decoded_packet));
+            if (packet_size > 0)
+            {
+                if (size + sizeof(start_sequence)+packet_size > 2048)
+                {
+                    ERR("data_size is too large, size: %d", size + sizeof(start_sequence)+packet_size);
+                    return -1;
+                }
+                uint32_t offset = size;
 
-                    memcpy(dest + *size_ptr, start_sequence,
-                        sizeof(start_sequence));
-                    memcpy(dest + *size_ptr + sizeof(start_sequence),
-                        decoded_packet, packet_size);
-                    memset(dest + *size_ptr + sizeof(start_sequence)+
-                        packet_size, 0, FF_INPUT_BUFFER_PADDING_SIZE);
+                memcpy(data_ptr + offset, start_sequence, sizeof(start_sequence));
+                offset += sizeof(start_sequence);
+                memcpy(data_ptr + offset, decoded_packet, packet_size);
+                offset += packet_size;
 
-                    *size_ptr += sizeof(start_sequence)+packet_size;
+                size = offset;
             }
         }
+
+        data_size = size;
 
         return 0;
     }

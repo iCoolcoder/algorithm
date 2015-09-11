@@ -9,7 +9,7 @@
 
 namespace avformat
 {
-    class sdp_session_level 
+    class sdp_session_level
     {
     public:
         sdp_session_level& operator=(const sdp_session_level& right);
@@ -30,14 +30,14 @@ namespace avformat
         std::string name;     /**< session name (can be an empty string) */
     };
 
-    struct rtp_media_info
+    class DLLEXPORT rtp_media_info
     {
     public:
         rtp_media_info();
 
         rtp_media_info(const rtp_media_info& info);
 
-//        rtp_media_info& operator=(const rtp_media_info& right);
+        //        rtp_media_info& operator=(const rtp_media_info& right);
 
         uint32_t channels;
         uint32_t rate;
@@ -68,27 +68,28 @@ namespace avformat
         SdpInfo();
         ~SdpInfo();
         const std::vector<rtp_media_info*>& get_media_infos();
+        sdp_session_level* get_sdp_header();
 
-        void parse_sdp_str(const char *sdp_str, uint32_t len);
         std::string generate_sdp_str();
         int set_dest_audio_addr(char *host, uint16_t port);
         int set_dest_video_addr(char *host, uint16_t port);
+        std::string load(std::string&);
         std::string load(const char*, int);
         std::string get_sdp_str() const;
         const char* get_sdp_char() const;
         int32_t length();
 
-        int add_sdp_session_level(sdp_session_level *s);
         int add_media(rtp_media_info *s);
         int clear_media();
 
     private:
+        void parse_sdp_str(const char *sdp_str, uint32_t len);
         void sdp_write_address(std::stringstream& ss, const char *dest_addr, const char *dest_type, int ttl);
         void sdp_write_header(std::stringstream& ss, struct sdp_session_level *s);
         void sdp_write_media(std::stringstream& ss, struct rtp_media_info *s);
         void sdp_write_media_attributes(std::stringstream& ss, struct rtp_media_info *s);
-        char *extradata2psets(struct rtp_media_info *s);
-        char *extradata2config(struct rtp_media_info *s);
+        char *extradata2psets(struct rtp_media_info *s, char* psets);
+        char *extradata2config(struct rtp_media_info *s, char* config);
         uint8_t *avc_find_startcode(const uint8_t *p, const uint8_t *end);
         uint8_t *avc_find_startcode_internal(const uint8_t *p, const uint8_t *end);
         static char *base64_encode(char *out, int out_size, const uint8_t *in, int in_size);
@@ -109,7 +110,7 @@ namespace avformat
             char *value, int value_size);
         static int parse_fmtp(rtp_media_info *s, const char *line,
             int(*parse_fmtp_func)(rtp_media_info *s, const char *attr, const char *value));
-        static int h264_parse_sprop_parameter_sets(rtp_media_info *s, uint8_t **data_ptr, uint32_t *size_ptr, const char *value);
+        static int h264_parse_sprop_parameter_sets(rtp_media_info *s, uint8_t *data_ptr, uint32_t& size_ptr, const char *value);
 
     private:
         sdp_session_level* _sdp_header;
