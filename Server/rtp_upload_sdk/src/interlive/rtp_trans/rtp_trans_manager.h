@@ -13,7 +13,7 @@
 #include "avformat/sdp.h"
 #include "avformat/rtp.h"
 #include "avformat/rtcp.h"
-#include "DXLock.h"
+#include "util/DXLock.h"
 
 const int MAX_RTP_LEN = (10 * 1024);
 

@@ -1,7 +1,7 @@
 #ifndef __RTP_UPLOAD_H__  
 #define __RTP_UPLOAD_H__   
 
-#include "DXThread.h"
+#include "util/DXThread.h"
 #include <string>
 
 class RTPUpload : public CDXThread {

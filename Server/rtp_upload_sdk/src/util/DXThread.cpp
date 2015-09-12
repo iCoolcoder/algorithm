@@ -1,25 +1,6 @@
 #include "DXThread.h"  
 #include <stddef.h>
 
-//int
-//util_set_nonblock(int fd, int on)
-//{
-//    int flags = 1;
-//
-//    if (fd > 0) {
-//        flags = fcntl(fd, F_GETFL);
-//        if (-1 == flags)
-//            return -1;
-//        if (on)
-//            flags |= O_NONBLOCK;
-//        else
-//            flags &= ~O_NONBLOCK;
-//        if (0 != fcntl(fd, F_SETFL, flags))
-//            return -2;
-//    }
-//    return 0;
-//}
-
 CDXThread::CDXThread()
 {
     m_hThread = NULL;

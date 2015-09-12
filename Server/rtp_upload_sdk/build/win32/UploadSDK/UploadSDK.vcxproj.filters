@@ -72,14 +72,14 @@
     <ClCompile Include="..\..\..\src\util\md5.cpp">
       <Filter>Source Files\util</Filter>
     </ClCompile>
+	<ClCompile Include="..\..\..\src\util\DXThread.cpp">
+      <Filter>Source Files\util</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\src\common\proto.cpp">
       <Filter>Source Files\common</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\common\proto_rtp_rtcp.cpp">
       <Filter>Source Files\common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\interlive\DXThread.cpp">
-      <Filter>Source Files\interlive</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\interlive\rtp_upload_sdk.cpp">
       <Filter>Source Files\interlive</Filter>
@@ -173,6 +173,12 @@
     <ClCompile Include="..\..\..\src\util\atlrx.h">
       <Filter>Header Files\util</Filter>
     </ClCompile>
+	<ClCompile Include="..\..\..\src\util\DXLock.h">
+      <Filter>Header Files\util</Filter>
+    </ClCompile>
+	<ClCompile Include="..\..\..\src\util\DXThread.h">
+      <Filter>Header Files\util</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\src\common\proto.h">
       <Filter>Header Files\common</Filter>
     </ClCompile>
@@ -188,9 +194,6 @@
     <ClCompile Include="..\..\..\src\common\type_defs.h">
       <Filter>Header Files\common</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\interlive\DXThread.h">
-      <Filter>Header Files\interlive</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\interlive\rtp_upload_sdk.h">
       <Filter>Header Files\interlive</Filter>
     </ClCompile>
@@ -200,7 +203,7 @@
 	<ClCompile Include="..\..\..\src\interlive\rtp_info.h">
       <Filter>Header Files\interlive</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\interlive\DXLock.h">
+	<ClCompile Include="..\..\..\src\interlive\worker.h">
       <Filter>Header Files\interlive</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\interlive\streamid.h">

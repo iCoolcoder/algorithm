@@ -2,7 +2,7 @@
 #include "rtp_upload_sdk.h"
 #include "rtp_info.h"
 #include "streamid.h"
-#include "DXThread.h"
+#include "worker.h"
 #include "util/util.h"
 #include "util/buffer.h"
 #include "avformat/sdp.h"
