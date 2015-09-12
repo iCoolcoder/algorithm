@@ -1,0 +1,258 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\interlive">
+      <UniqueIdentifier>{7c6e9677-c87d-4b7d-8ec5-af1fe82018d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\util">
+      <UniqueIdentifier>{DF870838-2A93-45E9-9F6D-28D06A24808F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\common">
+      <UniqueIdentifier>{0E72A851-FE2B-4370-9CEE-8404CD2B37FD}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\interlive\avformat">
+      <UniqueIdentifier>{0C04C6C4-CC0D-49FA-B96D-496C58C210D3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\interlive\avcodec">
+      <UniqueIdentifier>{4105AAD3-120C-4379-921D-F5927634581B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\interlive\rtp_trans">
+      <UniqueIdentifier>{F9C78E5E-E8BD-4C8E-9910-E66C67688DEA}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\interlive">
+      <UniqueIdentifier>{68f454a2-f0ec-4ea5-a225-99fa7d05e755}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\util">
+      <UniqueIdentifier>{53DBD1A5-2A8A-4917-8829-0EE7F61E8C4D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\common">
+      <UniqueIdentifier>{5A549224-3F53-4BAE-A2E3-AE51810034AD}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\interlive\avformat">
+      <UniqueIdentifier>{AC3F4244-6147-474F-A672-01E958AA7A4D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\interlive\avcodec">
+      <UniqueIdentifier>{1EA135B4-84A7-4B5D-9627-035A5B913C8B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\interlive\rtp_trans">
+      <UniqueIdentifier>{A4D36375-450D-4953-B104-EABFF1AAFB8E}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\util\log.cpp">
+      <Filter>Source Files\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\util\util.cpp">
+      <Filter>Source Files\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\util\statfile.cpp">
+      <Filter>Source Files\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\util\buffer.cpp">
+      <Filter>Source Files\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\util\memory.cpp">
+      <Filter>Source Files\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\util\md5.cpp">
+      <Filter>Source Files\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\common\proto.cpp">
+      <Filter>Source Files\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\common\proto_rtp_rtcp.cpp">
+      <Filter>Source Files\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\interlive\DXThread.cpp">
+      <Filter>Source Files\interlive</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\interlive\rtp_upload_sdk.cpp">
+      <Filter>Source Files\interlive</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\interlive\rtp_upload.cpp">
+      <Filter>Source Files\interlive</Filter>
+    </ClCompile>
+	<ClCompile Include="..\..\..\src\interlive\rtp_info.cpp">
+      <Filter>Source Files\interlive</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\interlive\testq.cpp">
+      <Filter>Source Files\interlive</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\interlive\avformat\rtcp_dec.cpp">
+      <Filter>Source Files\interlive\avformat</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\interlive\avformat\rtcp_enc.cpp">
+      <Filter>Source Files\interlive\avformat</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\interlive\avformat\rtcp_helper.cpp">
+      <Filter>Source Files\interlive\avformat</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\interlive\avformat\rtp_enc.cpp">
+      <Filter>Source Files\interlive\avformat</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\interlive\avformat\rtp_enc_aac.cpp">
+      <Filter>Source Files\interlive\avformat</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\interlive\avformat\rtp_enc_h264.cpp">
+      <Filter>Source Files\interlive\avformat</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\interlive\avformat\rtcp_dec.cpp">
+      <Filter>Source Files\interlive\avformat</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\interlive\avformat\rtcp_dec.cpp">
+      <Filter>Source Files\interlive\avformat</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\interlive\avformat\rtcp_dec.cpp">
+      <Filter>Source Files\interlive\avformat</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\interlive\avformat\sdp.cpp">
+      <Filter>Source Files\interlive\avformat</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\interlive\avcodec\aac.cpp">
+      <Filter>Source Files\interlive\avcodec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\interlive\avcodec\h264.cpp">
+      <Filter>Source Files\interlive\avcodec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\interlive\rtp_trans\rtp_session.cpp">
+      <Filter>Source Files\interlive\rtp_trans</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\interlive\rtp_trans\rtp_trans_manager.cpp">
+      <Filter>Source Files\interlive\rtp_trans</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\interlive\rtp_trans\rtp_trans.cpp">
+      <Filter>Source Files\interlive\rtp_trans</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\util\port.h">
+      <Filter>Header Files\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\util\util.h">
+      <Filter>Header Files\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\util\log.h">
+      <Filter>Header Files\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\util\statfile.h">
+      <Filter>Header Files\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\util\buffer.h">
+      <Filter>Header Files\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\util\memory.h">
+      <Filter>Header Files\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\util\md5.h">
+      <Filter>Header Files\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\util\RegExp.h">
+      <Filter>Header Files\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\util\StringProcess.h">
+      <Filter>Header Files\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\util\WinHttpClient.h">
+      <Filter>Header Files\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\util\atlrx.h">
+      <Filter>Header Files\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\common\proto.h">
+      <Filter>Header Files\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\common\proto_rtp_rtcp.h">
+      <Filter>Header Files\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\common\proto_define.h">
+      <Filter>Header Files\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\common\proto_define_rtp.h">
+      <Filter>Header Files\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\common\type_defs.h">
+      <Filter>Header Files\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\interlive\DXThread.h">
+      <Filter>Header Files\interlive</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\interlive\rtp_upload_sdk.h">
+      <Filter>Header Files\interlive</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\interlive\rtp_upload.h">
+      <Filter>Header Files\interlive</Filter>
+    </ClCompile>
+	<ClCompile Include="..\..\..\src\interlive\rtp_info.h">
+      <Filter>Header Files\interlive</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\interlive\DXLock.h">
+      <Filter>Header Files\interlive</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\interlive\streamid.h">
+      <Filter>Header Files\interlive</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\interlive\common_defs.h">
+      <Filter>Header Files\interlive</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\interlive\config_manager.h">
+      <Filter>Header Files\interlive</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\interlive\define.h">
+      <Filter>Header Files\interlive</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\interlive\avformat\rtcp_extern.h">
+      <Filter>Header Files\interlive\avformat</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\interlive\avformat\rtcp.h">
+      <Filter>Header Files\interlive\avformat</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\interlive\avformat\rtp_enc.h">
+      <Filter>Header Files\interlive\avformat</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\interlive\avformat\rtp.h">
+      <Filter>Header Files\interlive\avformat</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\interlive\avformat\sdp.h">
+      <Filter>Header Files\interlive\avformat</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\interlive\avcodec\aac.h">
+      <Filter>Header Files\interlive\avcodec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\interlive\avcodec\h264.h">
+      <Filter>Header Files\interlive\avcodec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\interlive\avcodec\avcodec.h">
+      <Filter>Header Files\interlive\avcodec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\interlive\rtp_trans\rtp_session.h">
+      <Filter>Header Files\interlive\rtp_trans</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\interlive\rtp_trans\rtp_trans.h">
+      <Filter>Header Files\interlive\rtp_trans</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\interlive\rtp_trans\rtp_trans_manager.h">
+      <Filter>Header Files\interlive\rtp_trans</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\interlive\rtp_trans\rtp_types.h">
+      <Filter>Header Files\interlive\rtp_trans</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\interlive\rtp_trans\rtp_config.h">
+      <Filter>Header Files\interlive\rtp_trans</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

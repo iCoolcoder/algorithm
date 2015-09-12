@@ -1,0 +1,158 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{8EFBAE1F-3013-4B73-AEA2-5848C78E0A30}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>UploadSDK</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>$(ProjectDir)..\..\..\src;$(ProjectDir)..\..\..\src\interlive;$(IncludePath)</IncludePath>
+    <TargetExt>.dll</TargetExt>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <CallingConvention>StdCall</CallingConvention>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>ws2_32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\util\log.cpp" />
+    <ClCompile Include="..\..\..\src\util\util.cpp" />
+    <ClCompile Include="..\..\..\src\util\statfile.cpp" />
+    <ClCompile Include="..\..\..\src\util\buffer.cpp" />
+    <ClCompile Include="..\..\..\src\util\memory.cpp" />
+    <ClCompile Include="..\..\..\src\util\md5.cpp" />
+    <ClCompile Include="..\..\..\src\common\proto.cpp" />
+    <ClCompile Include="..\..\..\src\common\proto_rtp_rtcp.cpp" />
+    <ClCompile Include="..\..\..\src\interlive\DXThread.cpp" />
+    <ClCompile Include="..\..\..\src\interlive\rtp_upload_sdk.cpp" />
+    <ClCompile Include="..\..\..\src\interlive\rtp_upload.cpp" />
+	<ClCompile Include="..\..\..\src\interlive\rtp_info.cpp" />
+    <ClCompile Include="..\..\..\src\interlive\avformat\rtcp_dec.cpp" />
+    <ClCompile Include="..\..\..\src\interlive\avformat\rtcp_enc.cpp" />
+    <ClCompile Include="..\..\..\src\interlive\avformat\rtcp_helper.cpp" />
+    <ClCompile Include="..\..\..\src\interlive\avformat\rtp_enc.cpp" />
+    <ClCompile Include="..\..\..\src\interlive\avformat\rtp_enc_aac.cpp" />
+    <ClCompile Include="..\..\..\src\interlive\avformat\rtp_enc_h264.cpp" />
+    <ClCompile Include="..\..\..\src\interlive\avformat\sdp.cpp" />
+    <ClCompile Include="..\..\..\src\interlive\avcodec\aac.cpp" />
+    <ClCompile Include="..\..\..\src\interlive\avcodec\h264.cpp" />
+    <ClCompile Include="..\..\..\src\interlive\rtp_trans\rtp_session.cpp" />
+    <ClCompile Include="..\..\..\src\interlive\rtp_trans\rtp_trans.cpp" />
+    <ClCompile Include="..\..\..\src\interlive\rtp_trans\rtp_trans_manager.cpp" />
+    <ClCompile Include="..\..\..\src\interlive\testq.cpp">
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</CompileAsManaged>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </PrecompiledHeader>
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</CompileAsManaged>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\util\port.h" />
+    <ClCompile Include="..\..\..\src\util\util.h" />
+    <ClCompile Include="..\..\..\src\util\log.h" />
+    <ClCompile Include="..\..\..\src\util\statfile.h" />
+    <ClCompile Include="..\..\..\src\util\buffer.h" />
+    <ClCompile Include="..\..\..\src\util\memory.h" />
+    <ClCompile Include="..\..\..\src\util\md5.h" />
+    <ClCompile Include="..\..\..\src\util\RegExp.h" />
+    <ClCompile Include="..\..\..\src\util\StringProcess.h" />
+    <ClCompile Include="..\..\..\src\util\WinHttpClient.h" />
+    <ClCompile Include="..\..\..\src\util\atlrx.h" />
+    <ClCompile Include="..\..\..\src\common\proto.h" />
+    <ClCompile Include="..\..\..\src\common\proto_rtp_rtcp.h" />
+    <ClCompile Include="..\..\..\src\common\proto_define.h" />
+    <ClCompile Include="..\..\..\src\common\proto_define_rtp.h" />
+    <ClCompile Include="..\..\..\src\common\type_defs.h" />
+    <ClCompile Include="..\..\..\src\interlive\DXThread.h" />
+    <ClCompile Include="..\..\..\src\interlive\rtp_upload_sdk.h" />
+    <ClCompile Include="..\..\..\src\interlive\rtp_upload.h" />
+	<ClCompile Include="..\..\..\src\interlive\rtp_info.h" />
+    <ClCompile Include="..\..\..\src\interlive\DXLock.h" />
+    <ClCompile Include="..\..\..\src\interlive\streamid.h" />
+    <ClCompile Include="..\..\..\src\interlive\common_defs.h" />
+    <ClCompile Include="..\..\..\src\interlive\config_manager.h" />
+    <ClCompile Include="..\..\..\src\interlive\define.h" />
+    <ClCompile Include="..\..\..\src\interlive\avformat\rtcp_extern.h" />
+    <ClCompile Include="..\..\..\src\interlive\avformat\rtcp.h" />
+    <ClCompile Include="..\..\..\src\interlive\avformat\rtp_enc.h" />
+    <ClCompile Include="..\..\..\src\interlive\avformat\rtp.h" />
+    <ClCompile Include="..\..\..\src\interlive\avformat\sdp.h" />
+    <ClCompile Include="..\..\..\src\interlive\avcodec\aac.h" />
+    <ClCompile Include="..\..\..\src\interlive\avcodec\h264.h" />
+    <ClCompile Include="..\..\..\src\interlive\avcodec\avcodec.h" />
+    <ClCompile Include="..\..\..\src\interlive\rtp_trans\rtp_session.h" />
+    <ClCompile Include="..\..\..\src\interlive\rtp_trans\rtp_trans.h" />
+    <ClCompile Include="..\..\..\src\interlive\rtp_trans\rtp_trans_manager.h" />
+    <ClCompile Include="..\..\..\src\interlive\rtp_trans\rtp_types.h" />
+    <ClCompile Include="..\..\..\src\interlive\rtp_trans\rtp_config.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
