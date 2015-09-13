@@ -7,6 +7,7 @@
 #include <WinSock2.h>
 #else
 #include <sys/time.h>
+#include <arpa/inet.h>
 #endif
 #include <stdint.h>
 

@@ -146,7 +146,7 @@ int decode_header(const buffer * ibuf, proto_header * h)
 
 int decode_header_rtp(const char * ibuf, size_t ibuf_size, proto_header& h)
 {
-    assert(ibuf != NULL && ibuf_size >= sizeof(proto_header), -1);
+    assert(ibuf != NULL && ibuf_size >= sizeof(proto_header));
 
     proto_header* ph_ibuf = (proto_header*)ibuf;
     h.magic = ph_ibuf->magic;

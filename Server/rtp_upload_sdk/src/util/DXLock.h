@@ -4,7 +4,7 @@
 #ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
-#elif
+#else
 #include <pthread.h>
 #endif
 
@@ -13,9 +13,8 @@ class CMutex
 public:
 #ifdef _WIN32
     typedef CRITICAL_SECTION Mutex_T;
-#elif
+#else
     typedef pthread_mutex_t Mutex_T;
-    typedef pthread_mutexattr_t Mattr_T;
 #endif
 
 public:
@@ -39,7 +38,7 @@ public:
 #ifdef _WIN32
         EnterCriticalSection(&m_mutex);
         return 0;
-#elif
+#else
         return pthread_mutex_lock(&m_mutex);
 #endif
     }
@@ -49,7 +48,7 @@ public:
 #ifdef _WIN32
         LeaveCriticalSection(&m_mutex);
         return 0;
-#elif
+#else
         return pthread_mutex_unlock(&m_mutex);
 #endif
     }
@@ -58,7 +57,7 @@ public:
     {
 #ifdef _WIN32
         return TryEnterCriticalSection(&m_mutex);
-#elif
+#else
         return pthread_mutex_trylock(&m_mutex);
 #endif
     }

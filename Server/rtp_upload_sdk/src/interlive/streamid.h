@@ -24,7 +24,7 @@
 
 #ifdef _WIN32
 #include <hash_map>
-#elif
+#else
 #include <ext/hash_map>
 #include <uuid/uuid.h>
 #include "util/city.h" 
@@ -193,7 +193,7 @@ public:
 
 };
 #pragma pack()
-#elif
+#else
 
 #pragma pack(1)
 class StreamId_Ext

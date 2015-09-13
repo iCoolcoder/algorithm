@@ -40,7 +40,7 @@ bool CDXThread::Start()
     {
         bOK = false;
     }
-#elif  
+#else  
     if (0 != pthread_create(&m_hThread, NULL, RunThread, this))
     {
         bOK = false;
@@ -110,7 +110,7 @@ bool CDXThread::Detach()
     m_nState = 1;
 #ifdef _WIN32
     return (TRUE == CloseHandle(m_hThread));
-#elif  
+#else  
     return (0 == pthread_detach(m_hThread));
 #endif  
 

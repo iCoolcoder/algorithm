@@ -6,17 +6,13 @@
 #include <Windows.h>  
 #include <WinSock2.h>
 #include <WS2tcpip.h>
-#define DX_CALLBACK WINAPI  
-typedef HANDLE DXHANDLE;
-#elif
+#else
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <fcntl.h>
-#define DX_CALLBACK  
-typedef pthread_t DXHANDLE;
 #endif  
 
 #include "rtp_trans/rtp_trans_manager.h"
@@ -66,7 +62,7 @@ public:
             /* sleep 1ms */
 #ifdef _WIN32
             Sleep(1);
-#elif
+#else
             usleep(1000);
 #endif
         }
@@ -134,7 +130,7 @@ public:
             /* sleep 1ms */
 #ifdef _WIN32
             Sleep(1);
-#elif
+#else
             usleep(1000);
 #endif
         }
@@ -178,7 +174,7 @@ public:
             /* sleep 10ms */
 #ifdef _WIN32
             Sleep(10);
-#elif
+#else
             usleep(10000);
 #endif
         }

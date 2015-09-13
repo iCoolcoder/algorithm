@@ -1,4 +1,7 @@
+#ifdef _WIN32
 #include "util/WinHttpClient.h"
+#endif
+
 #include "rtp_upload_sdk.h"
 #include "rtp_info.h"
 #include "streamid.h"
@@ -12,6 +15,7 @@
 #include "rtp_trans/rtp_trans_manager.h"
 #include <stddef.h>
 #include <string>
+#include "util/httpclient.h"
 
 #include "util/log.h"
 
@@ -44,6 +48,7 @@ extern "C" DLLEXPORT int rtp_upload_sdk_destroy();
 
 #define FIXED_SDP_STR "v=0\r\no=- 0 0 IN IP4 127.0.0.1\r\ns=000000000000000000000000152e9738\r\nc=IN IP4 10.10.69.127\r\nt=0 0\r\na=tool:YouKu Media Server\r\nm=audio 5002 RTP/AVP 97\r\na=rtpmap:97 MPEG4-GENERIC/48000/2\r\na=fmtp:97 profile-level-id=1;mode=AAC-hbr;sizelength=13;indexlength=3;indexdeltalength=3; config=1190\r\nm=video 5000 RTP/AVP 96\r\na=rtpmap:96 H264/90000"
 
+#ifdef _WIN32
 wstring string2wstring(string str)
 {
     wstring result;
@@ -55,14 +60,16 @@ wstring string2wstring(string str)
     delete[] buffer;
     return result;
 }
+#endif
 
 int put_sdp(string sdp, string sid)
 {
     char url[1024] = { 0 };
-    sprintf_s(url, "http://%s:%s/upload/sdp/%s.sdp?token=98765", 
+    sprintf(url, "http://%s:%s/upload/sdp/%s.sdp?token=98765", 
         receiver_ip.c_str(), receiver_tcp_port.c_str(), sid.c_str());
 
     string url_str = url;
+#ifdef _WIN32
     wstring url_wstr = string2wstring(url_str);
     WinHttpClient client(url_wstr);
 
@@ -82,6 +89,11 @@ int put_sdp(string sdp, string sid)
 
     wstring httpResponseHeader = client.GetResponseHeader();
     wstring httpResponseContent = client.GetResponseContent();
+#else
+    CHttpClient hc;
+    string rsp;
+    hc.Post(url_str, sdp, rsp); 
+#endif
     return 0;
 }
 

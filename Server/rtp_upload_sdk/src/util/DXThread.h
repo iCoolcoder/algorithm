@@ -6,7 +6,7 @@
 #include <Windows.h>  
 #define DX_CALLBACK WINAPI  
 typedef HANDLE DXHANDLE;
-#elif
+#else
 #include <pthread.h>  
 #define DX_CALLBACK  
 typedef pthread_t DXHANDLE;
@@ -32,4 +32,4 @@ protected:
     int m_nState;
 };
 
-#endif /*DXThread.h*/
+#endif /* DXThread.h */
