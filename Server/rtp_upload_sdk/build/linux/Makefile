@@ -26,8 +26,8 @@ RTPTRANS_DIR = $(SRC_DIR)/interlive/rtp_trans
 RECEIVER = receiver
 BIN = $(RECEIVER)
 
-COMMONOBJS = $(UTIL_DIR)/log.o $(UTIL_DIR)/statfile.o $(UTIL_DIR)/buffer.o $(UTIL_DIR)/memory.o $(UTIL_DIR)/util.o \
-			 $(UTIL_DIR)/md5.o $(UTIL_DIR)/DXThread.o $(UTIL_DIR)/city.o $(UTIL_DIR)/httpclient.o  \
+COMMONOBJS = $(UTIL_DIR)/log.o $(UTIL_DIR)/buffer.o $(UTIL_DIR)/memory.o $(UTIL_DIR)/util.o \
+			 $(UTIL_DIR)/md5.o $(UTIL_DIR)/DXThread.o $(UTIL_DIR)/httpclient.o  \
 			 $(COMMON_DIR)/proto.o $(COMMON_DIR)/proto_rtp_rtcp.o \
 			 $(LIBUUID) $(LIBCURL)
 
