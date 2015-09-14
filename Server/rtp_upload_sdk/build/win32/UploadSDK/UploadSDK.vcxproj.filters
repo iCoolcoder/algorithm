@@ -60,9 +60,6 @@
     <ClCompile Include="..\..\..\src\util\util.cpp">
       <Filter>Source Files\util</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\util\statfile.cpp">
-      <Filter>Source Files\util</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\util\buffer.cpp">
       <Filter>Source Files\util</Filter>
     </ClCompile>
@@ -72,7 +69,7 @@
     <ClCompile Include="..\..\..\src\util\md5.cpp">
       <Filter>Source Files\util</Filter>
     </ClCompile>
-	<ClCompile Include="..\..\..\src\util\DXThread.cpp">
+    <ClCompile Include="..\..\..\src\util\DXThread.cpp">
       <Filter>Source Files\util</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\common\proto.cpp">
@@ -87,7 +84,7 @@
     <ClCompile Include="..\..\..\src\interlive\rtp_upload.cpp">
       <Filter>Source Files\interlive</Filter>
     </ClCompile>
-	<ClCompile Include="..\..\..\src\interlive\rtp_info.cpp">
+    <ClCompile Include="..\..\..\src\interlive\rtp_info.cpp">
       <Filter>Source Files\interlive</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\interlive\testq.cpp">
@@ -149,9 +146,6 @@
     <ClCompile Include="..\..\..\src\util\log.h">
       <Filter>Header Files\util</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\util\statfile.h">
-      <Filter>Header Files\util</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\util\buffer.h">
       <Filter>Header Files\util</Filter>
     </ClCompile>
@@ -173,10 +167,10 @@
     <ClCompile Include="..\..\..\src\util\atlrx.h">
       <Filter>Header Files\util</Filter>
     </ClCompile>
-	<ClCompile Include="..\..\..\src\util\DXLock.h">
+    <ClCompile Include="..\..\..\src\util\DXLock.h">
       <Filter>Header Files\util</Filter>
     </ClCompile>
-	<ClCompile Include="..\..\..\src\util\DXThread.h">
+    <ClCompile Include="..\..\..\src\util\DXThread.h">
       <Filter>Header Files\util</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\common\proto.h">
@@ -200,10 +194,10 @@
     <ClCompile Include="..\..\..\src\interlive\rtp_upload.h">
       <Filter>Header Files\interlive</Filter>
     </ClCompile>
-	<ClCompile Include="..\..\..\src\interlive\rtp_info.h">
+    <ClCompile Include="..\..\..\src\interlive\rtp_info.h">
       <Filter>Header Files\interlive</Filter>
     </ClCompile>
-	<ClCompile Include="..\..\..\src\interlive\worker.h">
+    <ClCompile Include="..\..\..\src\interlive\worker.h">
       <Filter>Header Files\interlive</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\interlive\streamid.h">

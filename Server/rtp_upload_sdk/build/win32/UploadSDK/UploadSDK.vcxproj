@@ -81,16 +81,15 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\src\util\log.cpp" />
     <ClCompile Include="..\..\..\src\util\util.cpp" />
-    <ClCompile Include="..\..\..\src\util\statfile.cpp" />
     <ClCompile Include="..\..\..\src\util\buffer.cpp" />
     <ClCompile Include="..\..\..\src\util\memory.cpp" />
     <ClCompile Include="..\..\..\src\util\md5.cpp" />
-	<ClCompile Include="..\..\..\src\util\DXThread.cpp" />
+    <ClCompile Include="..\..\..\src\util\DXThread.cpp" />
     <ClCompile Include="..\..\..\src\common\proto.cpp" />
     <ClCompile Include="..\..\..\src\common\proto_rtp_rtcp.cpp" />
     <ClCompile Include="..\..\..\src\interlive\rtp_upload_sdk.cpp" />
     <ClCompile Include="..\..\..\src\interlive\rtp_upload.cpp" />
-	<ClCompile Include="..\..\..\src\interlive\rtp_info.cpp" />
+    <ClCompile Include="..\..\..\src\interlive\rtp_info.cpp" />
     <ClCompile Include="..\..\..\src\interlive\avformat\rtcp_dec.cpp" />
     <ClCompile Include="..\..\..\src\interlive\avformat\rtcp_enc.cpp" />
     <ClCompile Include="..\..\..\src\interlive\avformat\rtcp_helper.cpp" />
@@ -116,7 +115,6 @@
     <ClCompile Include="..\..\..\src\util\port.h" />
     <ClCompile Include="..\..\..\src\util\util.h" />
     <ClCompile Include="..\..\..\src\util\log.h" />
-    <ClCompile Include="..\..\..\src\util\statfile.h" />
     <ClCompile Include="..\..\..\src\util\buffer.h" />
     <ClCompile Include="..\..\..\src\util\memory.h" />
     <ClCompile Include="..\..\..\src\util\md5.h" />
@@ -124,8 +122,8 @@
     <ClCompile Include="..\..\..\src\util\StringProcess.h" />
     <ClCompile Include="..\..\..\src\util\WinHttpClient.h" />
     <ClCompile Include="..\..\..\src\util\atlrx.h" />
-	<ClCompile Include="..\..\..\src\util\DXLock.h" />
-	<ClCompile Include="..\..\..\src\util\DXThread.h" />
+    <ClCompile Include="..\..\..\src\util\DXLock.h" />
+    <ClCompile Include="..\..\..\src\util\DXThread.h" />
     <ClCompile Include="..\..\..\src\common\proto.h" />
     <ClCompile Include="..\..\..\src\common\proto_rtp_rtcp.h" />
     <ClCompile Include="..\..\..\src\common\proto_define.h" />
@@ -133,8 +131,8 @@
     <ClCompile Include="..\..\..\src\common\type_defs.h" />
     <ClCompile Include="..\..\..\src\interlive\rtp_upload_sdk.h" />
     <ClCompile Include="..\..\..\src\interlive\rtp_upload.h" />
-	<ClCompile Include="..\..\..\src\interlive\rtp_info.h" />
-	<ClCompile Include="..\..\..\src\interlive\worker.h" />
+    <ClCompile Include="..\..\..\src\interlive\rtp_info.h" />
+    <ClCompile Include="..\..\..\src\interlive\worker.h" />
     <ClCompile Include="..\..\..\src\interlive\streamid.h" />
     <ClCompile Include="..\..\..\src\interlive\common_defs.h" />
     <ClCompile Include="..\..\..\src\interlive\config_manager.h" />
