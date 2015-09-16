@@ -46,18 +46,22 @@ public:
         init();
         while (1)
         {
-            char buf[65536];
-            int buf_len = _rtp_trans_mgr->get_one_rtp_rtcp(buf, 65536);
-            if (buf_len <= 0) {
-                continue;
-            }
-            
-            struct sockaddr_in client_addr;
-            socklen_t size = sizeof(struct sockaddr);
-            client_addr.sin_family = AF_INET;
-            client_addr.sin_addr.s_addr = inet_addr(_ip.c_str());
-            client_addr.sin_port = htons(atoi(_port.c_str()));
-            int len = sendto(_fd, buf, buf_len, 0, (struct sockaddr *)&client_addr, size);
+            do
+            {
+                char buf[65536];
+                int buf_len = _rtp_trans_mgr->get_one_rtp_rtcp(buf, 65536);
+                if (buf_len <= 0) 
+                {
+                    break;
+                }
+
+                struct sockaddr_in client_addr;
+                socklen_t size = sizeof(struct sockaddr);
+                client_addr.sin_family = AF_INET;
+                client_addr.sin_addr.s_addr = inet_addr(_ip.c_str());
+                client_addr.sin_port = htons(atoi(_port.c_str()));
+                sendto(_fd, buf, buf_len, 0, (struct sockaddr *)&client_addr, size);
+            } while(0);
 
             /* sleep 1ms */
 #ifdef _WIN32
@@ -69,9 +73,9 @@ public:
         return 0;
     }
 private:
-    int _fd;
-    string _ip;
-    string _port;
+    int             _fd;
+    string          _ip;
+    string          _port;
     RTPTransManager *_rtp_trans_mgr;
 };
 
@@ -137,10 +141,10 @@ public:
         return 0;
     }
 private:
-    int _fd;
-    buffer * _internal_used_buf;
-    struct sockaddr_in _client_addr;
-    RTPTransManager *_rtp_trans_mgr;
+    int                     _fd;
+    buffer                  *_internal_used_buf;
+    struct sockaddr_in      _client_addr;
+    RTPTransManager         *_rtp_trans_mgr;
 };
 
 class RTPTransTimer : public CDXThread
@@ -181,7 +185,7 @@ public:
         return 0;
     }
 private:
-    bool _running;
+    bool            _running;
     RTPTransManager *_rtp_trans_mgr;
 };
 

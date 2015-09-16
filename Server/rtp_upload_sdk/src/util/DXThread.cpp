@@ -1,6 +1,6 @@
 #include "DXThread.h"  
 #include <stddef.h>
-
+#include "log.h"
 CDXThread::CDXThread()
 {
     m_hThread = NULL;
